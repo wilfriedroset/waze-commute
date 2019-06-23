@@ -1,0 +1,7 @@
+{
+    "addresses": [
+        {"address": "Pessac, Gironde, France", "rive": "gauche"},
+        {"address": "Merignac, Gironde, France", "rive": "gauche"},
+        {"address": "Saint-Emillion, Gironde, France", "rive": "droite"}
+    ]
+}

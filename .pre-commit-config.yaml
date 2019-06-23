@@ -1,0 +1,33 @@
+---
+repos:
+  - repo: local
+    hooks:
+      - id: hadolint
+        name: hadolint
+        entry: hadolint
+        language: system
+        files: "[Dd]ockerfile.*"
+        types: [file]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    sha: master
+    hooks:
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: double-quote-string-fixer
+      - id: end-of-file-fixer
+      - id: fix-encoding-pragma
+        args: ['--remove']
+      - id: flake8
+        args: ['--max-line-length=120']
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/FalconSocial/pre-commit-python-sorter
+    sha: master
+    hooks:
+    - id: python-import-sorter
+      args: ['--silent-overwrite']
+  - repo: https://github.com/chewse/pre-commit-mirrors-pydocstyle
+    sha: master
+    hooks:
+    - id: pydocstyle
+      args: ['--config=.pydocstyle', '--match="(?!test_).*\.py"']
