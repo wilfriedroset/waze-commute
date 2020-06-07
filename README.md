@@ -169,97 +169,7 @@ Build the image using the provide docker file.
 $ docker build -t waze-commute .
 ```
 
-Then execute
-```
-$ docker run waze-commute -h
-usage: waze-commute.py [-h] --addresses-file ADDRESSES_FILE
-                       [--region {EU,US,IL,AU}] --destination DESTINATION
-                       [--destination-alias DESTINATION_ALIAS]
-                       [--departure-alias DEPARTURE_ALIAS] [--no-real-time]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --addresses-file ADDRESSES_FILE
-                        path to addresses file
-  --region {EU,US,IL,AU}
-                        Region is used for address searching
-  --destination DESTINATION
-                        destination address for which to compute from/to
-                        routing
-  --destination-alias DESTINATION_ALIAS
-                        alias of destination address
-  --departure-alias DEPARTURE_ALIAS
-                        alias of departure addresses
-```
-
-You will need to provide your addresses files. You can use Bind mount a volume
-option to do so.
-
-```
-$ docker run -v ${PWD}/addresses.example.json:/mnt/addresses.example.json waze-commute --addresses-file /mnt/addresses.example.json --destination "Bordeaux, Gironde, France"
-[
-    {
-        "duration": 1560,
-        "distance": 10952,
-        "from": "Pessac, Gironde, France",
-        "to": "Bordeaux, Gironde, France",
-        "source": "waze",
-        "way": "home->office",
-        "with_traffic": true,
-        "rive": "gauche"
-    },
-    {
-        "duration": 1321,
-        "distance": 19214,
-        "from": "Bordeaux, Gironde, France",
-        "to": "Pessac, Gironde, France",
-        "source": "waze",
-        "way": "office->home",
-        "with_traffic": true,
-        "rive": "gauche"
-    },
-    {
-        "duration": 1260,
-        "distance": 8881,
-        "from": "Merignac, Gironde, France",
-        "to": "Bordeaux, Gironde, France",
-        "source": "waze",
-        "way": "home->office",
-        "with_traffic": true,
-        "rive": "gauche"
-    },
-    {
-        "duration": 1261,
-        "distance": 8685,
-        "from": "Bordeaux, Gironde, France",
-        "to": "Merignac, Gironde, France",
-        "source": "waze",
-        "way": "office->home",
-        "with_traffic": true,
-        "rive": "gauche"
-    },
-    {
-        "duration": 2521,
-        "distance": 44344,
-        "from": "Saint-Emillion, Gironde, France",
-        "to": "Bordeaux, Gironde, France",
-        "source": "waze",
-        "way": "home->office",
-        "with_traffic": true,
-        "rive": "droite"
-    },
-    {
-        "duration": 2461,
-        "distance": 43901,
-        "from": "Bordeaux, Gironde, France",
-        "to": "Saint-Emillion, Gironde, France",
-        "source": "waze",
-        "way": "office->home",
-        "with_traffic": true,
-        "rive": "droite"
-    }
-]
-```
+Then execute, use it like [telegraf image](https://hub.docker.com/_/telegraf)
 
 ## Bonus: Spawn your influxdb & grafana with docker
 
@@ -285,6 +195,16 @@ services:
     networks:
       - tsdb
     user: "1000"
+
+  telegraf:
+    build:
+      context: ./waze-commute
+      dockerfile: Dockerfile-telegraf
+    command: ["telegraf", "--config-directory", "/etc/telegraf/telegraf.d/"]
+    volumes:
+      - ./data/telegraf:/etc/telegraf:ro
+    networks:
+      - tsdb
 
 networks:
   tsdb:
