@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
+import yaml
 import json
 import logging
 
@@ -86,7 +87,7 @@ def main():
     """ The main """
     args = parse_cli()
     data = []
-    addresses = json.load(args.addresses_file)
+    addresses = yaml.safe_load(args.addresses_file)
 
     for address in addresses.get('addresses', []):
         tags = address.copy()

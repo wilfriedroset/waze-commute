@@ -46,15 +46,14 @@ Credit goes to [kovacsbalu](https://github.com/kovacsbalu) for
 
 Point of interest address can be define on the command line as there is only
 address supported as point of interest. Departure addresses are defined in a
-JSON configuration file.
+YAML (or JSON) configuration file.
 
-```json
-{
-    "addresses": [
-        {"address": "Saint Medard en Jalles, Gironde, France"},
-        {"address": "Sainte-Eulalie, Gironde, France"}
-    ]
-}
+```yaml
+---
+addresses:
+  - address: Pessac, Gironde, France
+  - address: Merignac, Gironde, France
+  - address: Saint-Emillion, Gironde, France
 ```
 
 You can add as many key as you want, they will be used as tags. You can add for
@@ -62,20 +61,21 @@ example geographic coordinate (latitude/longitude), average m2 price, neighbour
 name...
 
 
-```json
-{
-    "addresses": [
-        {"address": "Pessac, Gironde, France", "river_side": "gauche"},
-        {"address": "Merignac, Gironde, France", "river_side": "gauche"},
-        {"address": "Saint-Emillion, Gironde, France", "river_side": "droite"}
-    ]
-}
+```yaml
+---
+addresses:
+  - address: Pessac, Gironde, France
+    river_side: gauche
+  - address: Merignac, Gironde, France
+    river_side: gauche
+  - address: Saint-Emillion, Gironde, France
+    river_side: droite
 ```
 
 ## Example
 
 ```
-$ python waze-commute.py --addresses-file addresses.example.json --destination "Bordeaux, Gironde, France"
+$ python waze-commute.py --addresses-file addresses.example.yaml --destination "Bordeaux, Gironde, France"
 [
     {
         "duration": 1500,
@@ -153,7 +153,7 @@ Here is an example of telegraf configuration
 
 ```toml
 [[inputs.exec]]
-  commands = ["python /absolute/path/to/waze-commute.py --addresses-file /absolute/path/to/addresses.example.json --destination 'Bordeaux, Gironde, France'"]
+  commands = ["python /absolute/path/to/waze-commute.py --addresses-file /absolute/path/to/addresses.example.yaml --destination 'Bordeaux, Gironde, France'"]
   name_override = "commute"
   timeout = "4m"
   interval = "5m"
